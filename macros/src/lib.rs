@@ -44,6 +44,12 @@ fn part_de_impl(ident: &Ident, sd_crate: TokenStream2, struct_data: &DataStruct)
         .collect::<Vec<_>>();
 
     quote! {
+        impl #ident {
+            pub fn is_unset(&self) -> bool {
+                #(self.#field_idents.is_none())&&*
+            }
+        }
+
         impl<'de> #sd_crate::de::Deserialize<'de> for #ident {
             fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
             where
